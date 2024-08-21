@@ -1,0 +1,60 @@
+{% extends 'app1/base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="container" style="background-color: #f8f9fa; padding: 20px;">
+    <div class="row">
+        <div class="col col-8 offset-2">
+            <h1 class="alert alert-warning text-center" style="background-color: #ffcc00; color: #171718;">Employee Registration Form</h1>
+            <form action="{% url 'home' %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" name="register_employee" value="Submit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+    <br><br><br>
+    <h1 class="alert alert-warning text-center" style="background-color: #ffcc00; color: #333;">Employee Records</h1>
+    <table class="table my-5">
+        <thead style="background-color: #007bff; color: rgb(191, 33, 33);">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">NAME</th>
+                <th scope="col">EMAIL</th>
+                <th scope="col">PHONE NUMBER</th>
+                <th scope="col">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in data %}
+            <tr style="background-color: #2973be;">
+                <th scope="row">{{ i.id }}</th>
+                <td>{{ i.name }}</td>
+                <td>{{ i.email }}</td>
+                <td>{{ i.phone_number }}</td>
+                <td>
+                    <!-- Update icon -->
+                    <a href="{% url 'update_employee' i.id %}" style="color: #28a745;">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </a>
+                    <!-- Delete icon -->
+                    <form action="{% url 'delete_employee' i.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" style="background: none; border: none; color: #dc3545;">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Add Email Sending Section -->
+    <h1 class="alert alert-info text-center" style="background-color: #17a2b8; color: #ffffff;">Send Email</h1>
+    <form action="{% url 'home' %}" method="post">
+        {% csrf_token %}
+        {{ email_form.as_p }}
+        <button type="submit" name="send_email" class="btn btn-info">Send Email</button>
+    </form>
+</div>
+{% endblock content %}
